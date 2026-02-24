@@ -773,12 +773,33 @@
     });
   });
 
-  function handleWaitlist() {
+  async function handleWaitlist() {
     const name = document.getElementById('wl-name').value.trim();
     const email = document.getElementById('wl-email').value.trim();
     if (!name || !email) return;
-    document.getElementById('waitlist-form').style.display = 'none';
-    document.getElementById('waitlist-success').style.display = 'block';
+
+    const btn = document.querySelector('#waitlist-form button');
+    btn.textContent = 'Saving...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('https://formspree.io/f/mreaowgw', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ name, email })
+      });
+
+      if (res.ok) {
+        document.getElementById('waitlist-form').style.display = 'none';
+        document.getElementById('waitlist-success').style.display = 'block';
+      } else {
+        btn.textContent = 'Something went wrong — try again';
+        btn.disabled = false;
+      }
+    } catch {
+      btn.textContent = 'Something went wrong — try again';
+      btn.disabled = false;
+    }
   }
 
   // Allow Enter key to submit
