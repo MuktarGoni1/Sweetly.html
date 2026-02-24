@@ -1,2 +1,2 @@
-# Sweetly.html
+# index.html
 Sweetly landing page
